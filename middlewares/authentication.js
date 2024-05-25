@@ -19,7 +19,6 @@ const authentication = async (req, res, next) => {
             refreshToken: payload.refreshToken,
             user: payload.user.userID
         })
-        console.log(existingToken);
         if (!existingToken || !existingToken?.isValid) {
             throw new unauthorizationError('Invalid Credential')
         }
