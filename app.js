@@ -18,7 +18,7 @@ const connectDB = require('./db/connect');
 // routers
 const todosRoute = require('./routes/todosRoute');
 const authRoute = require('./routes/authRoute');
-const { requireAuth } = require('./middlewares/authentication');
+const { requireAuth, authentication } = require('./middlewares/authentication');
 
 // middlewares
 const notFoundMiddleware = require('./middlewares/not-found');
@@ -33,9 +33,7 @@ app.use(
     })
 )
 app.use(helmet());
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors());
 app.use(xss());
 app.use(mongoSanitize());
 //extra middlewares
@@ -47,7 +45,7 @@ app.use(cookieParser(process.env.COOKIE_SECURE))
 
 
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/tasks', requireAuth, todosRoute);
+app.use('/api/v1/tasks', authentication, todosRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

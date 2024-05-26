@@ -4,7 +4,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const createTokenUser = require('../utils/createTokenUser');
 const Token = require("../models/Token");
-const { attachCookiesToResponse, createJWT } = require("../utils/jwt");
+const { attachCookiesToResponse } = require("../utils/jwt");
 const crypto = require('crypto');
 
 const register = async (req, res) => {
@@ -49,32 +49,32 @@ const login = async (req, res) => {
 
     const tokenUser = createTokenUser(user);
     
-    const token = createJWT({ payload: { user : tokenUser} });
+    // const token = createJWT({ payload: { user : tokenUser} });
 
-    res.status(StatusCodes.OK).json({ user: tokenUser, token })
+    // res.status(StatusCodes.OK).json({ user: tokenUser, token })
 
-    // let refreshToken = '';
-    // // check if token exist for user already
-    // const existingToken = await Token.findOne({ user: user._id });
-    // if(existingToken){
-    //     const { isValid } = existingToken;
-    //     if(!isValid){
-    //         throw new unauthorizationError('Invalid Credentials');
-    //     }
-    //     refreshToken = existingToken.refreshToken;
-    //     const jwtTokens = attachCookiesToResponse({ res, user: tokenUser, refreshToken})
-    //     res.status(StatusCodes.OK).json({ user: tokenUser })
-    //     return;
-    // }
+    let refreshToken = '';
+    // check if token exist for user already
+    const existingToken = await Token.findOne({ user: user._id });
+    if(existingToken){
+        const { isValid } = existingToken;
+        if(!isValid){
+            throw new unauthorizationError('Invalid Credentials');
+        }
+        refreshToken = existingToken.refreshToken;
+        const jwtTokens = attachCookiesToResponse({ res, user: tokenUser, refreshToken})
+        res.status(StatusCodes.OK).json({ user: tokenUser })
+        return;
+    }
     
-    // refreshToken = await crypto.randomBytes(50).toString('hex');
-    // const ip = req.ip;
-    // const userAgent = req.headers['user-agent'];
-    // const userToken = { refreshToken, ip, userAgent, user: user._id };
+    refreshToken = await crypto.randomBytes(50).toString('hex');
+    const ip = req.ip;
+    const userAgent = req.headers['user-agent'];
+    const userToken = { refreshToken, ip, userAgent, user: user._id };
     
-    // await Token.create(userToken);
-    // const jwtTokens = attachCookiesToResponse({ res, user: tokenUser, refreshToken})
-    // res.status(StatusCodes.OK).json({ user: tokenUser });
+    await Token.create(userToken);
+    const jwtTokens = attachCookiesToResponse({ res, user: tokenUser, refreshToken})
+    res.status(StatusCodes.OK).json({ user: tokenUser });
 }
 
 const logout = async (req, res) => {
