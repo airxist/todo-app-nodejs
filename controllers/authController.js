@@ -49,7 +49,7 @@ const login = async (req, res) => {
 
     const tokenUser = createTokenUser(user);
     const token = createJWT({ payload: { user : tokenUser} });
-    res.status(StatusCodes.OK).json({ msg: "success", token })
+    res.status(StatusCodes.OK).json({ user: tokenUser, token })
 
     // let refreshToken = '';
     // // check if token exist for user already
