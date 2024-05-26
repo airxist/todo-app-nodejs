@@ -3,7 +3,7 @@ const Todos = require('../models/Todos');
 const CustomError = require('../errors');
 
 const getAllTodo = async (req, res) => {  
-    const { userID } = req.params;
+    const { userID } = req.user;
     const todo = await Todos.find({ user: userID });
     res.status(StatusCodes.OK).json({ todo })
 }

@@ -18,7 +18,7 @@ const connectDB = require('./db/connect');
 // routers
 const todosRoute = require('./routes/todosRoute');
 const authRoute = require('./routes/authRoute');
-const { requireAuth, authentication } = require('./middlewares/authentication');
+const { authentication } = require('./middlewares/authentication');
 
 // middlewares
 const notFoundMiddleware = require('./middlewares/not-found');
@@ -45,7 +45,7 @@ app.use(cookieParser(process.env.COOKIE_SECURE))
 
 
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/tasks', todosRoute);
+app.use('/api/v1/tasks', authentication, todosRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
