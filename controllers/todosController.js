@@ -8,7 +8,6 @@ const getAllTodo = async (req, res) => {
     res.status(StatusCodes.OK).json({ todo })
 }
 
-
 const createTodo = async (req, res) => {
     const { userID } = req.user;
     const { task } = req.body;

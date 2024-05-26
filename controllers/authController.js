@@ -48,7 +48,9 @@ const login = async (req, res) => {
     }
 
     const tokenUser = createTokenUser(user);
+    
     const token = createJWT({ payload: { user : tokenUser} });
+
     res.status(StatusCodes.OK).json({ user: tokenUser, token })
 
     // let refreshToken = '';
