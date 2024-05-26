@@ -45,7 +45,7 @@ app.use(cookieParser(process.env.COOKIE_SECURE))
 
 
 app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/tasks', authentication, todosRoute);
+app.use('/api/v1/tasks', todosRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
