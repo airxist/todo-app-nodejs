@@ -7,12 +7,12 @@ const {
     forgotPassword,
     resetPassword
 } = require('../controllers/authController');
-const { authentication } = require('../middlewares/authentication');
+const { requireAuth } = require('../middlewares/authentication');
 
 
 router.post('/register', register);
 router.post('/login', login);
-router.delete('/logout', authentication, logout);
+router.delete('/logout', requireAuth, logout);
 router.post('/forgotpassword', forgotPassword);
 router.post('/resetpassword', resetPassword);
 
